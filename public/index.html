@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prometheus - Lua Obfuscator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #1a1a2e, #3d1e52, #1a1a2e);
+        }
+        textarea {
+            scrollbar-width: thin;
+            scrollbar-color: #4a5568 #1a202c;
+        }
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: #1a202c;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #ef4444, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8 md:mb-12">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <svg class="w-10 h-10 md:w-12 md:h-12 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <h1 class="text-4xl md:text-5xl font-bold gradient-text">
+                    Prometheus
+                </h1>
+            </div>
+            <p class="text-lg md:text-xl text-gray-300">Lua Code Obfuscator</p>
+            <p class="text-xs md:text-sm text-gray-400 mt-2">Protect your Lua scripts with advanced obfuscation</p>
+        </div>
+
+        <!-- Preset Selection -->
+        <div class="mb-6 flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4">
+            <label class="text-gray-300 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+                Preset:
+            </label>
+            <select id="preset" class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500">
+                <option value="Weak">Weak</option>
+                <option value="Medium">Medium</option>
+                <option value="Strong" selected>Strong</option>
+                <option value="Extreme">Extreme</option>
+            </select>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            <!-- Input Panel -->
+            <div class="bg-gray-800 rounded-xl shadow-2xl border border-gray-700 overflow-hidden">
+                <div class="bg-gray-900 px-4 md:px-6 py-3 md:py-4 border-b border-gray-700">
+                    <h2 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                        Input Code
+                    </h2>
+                </div>
+                <textarea
+                    id="inputCode"
+                    class="w-full h-64 md:h-96 bg-gray-900 text-gray-100 p-4 md:p-6 font-mono text-xs md:text-sm focus:outline-none resize-none"
+                    placeholder="-- Paste your Lua code here&#x0a;local function hello(name)&#x0a;  print(&quot;Hello, &quot; .. name)&#x0a;end&#x0a;&#x0a;hello(&quot;World&quot;)"
+                    spellcheck="false"
+                >-- Paste your Lua code here
+local function hello(name)
+  print("Hello, " .. name)
+end
+
+hello("World")</textarea>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="bg-gray-800 rounded-xl shadow-2xl border border-gray-700 overflow-hidden">
+                <div class="bg-gray-900 px-4 md:px-6 py-3 md:py-4 border-b border-gray-700 flex justify-between items-center">
+                    <h2 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        Obfuscated Code
+                    </h2>
+                    <div id="outputButtons" class="hidden flex gap-2">
+                        <button
+                            id="copyBtn"
+                            class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+                            title="Copy to clipboard"
+                        >
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                            </svg>
+                        </button>
+                        <button
+                            id="downloadBtn"
+                            class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+                            title="Download file"
+                        >
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <textarea
+                    id="outputCode"
+                    readonly
+                    class="w-full h-64 md:h-96 bg-gray-900 text-gray-100 p-4 md:p-6 font-mono text-xs md:text-sm focus:outline-none resize-none"
+                    placeholder="Obfuscated code will appear here..."
+                    spellcheck="false"
+                ></textarea>
+            </div>
+        </div>
+
+        <!-- Obfuscate Button -->
+        <div class="mt-6 md:mt-8 text-center">
+            <button
+                id="obfuscateBtn"
+                class="bg-gradient-to-r from-red-500 to-purple-600 hover:from-red-600 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-3 md:py-4 px-8 md:px-12 rounded-xl shadow-lg transform transition-all hover:scale-105 disabled:scale-100 flex items-center gap-3 mx-auto text-sm md:text-base"
+            >
+                <svg id="btnIcon" class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                </svg>
+                <span id="btnText">Obfuscate Code</span>
+            </button>
+        </div>
+
+        <!-- Status Message -->
+        <div id="statusMessage" class="mt-4 text-center hidden">
+            <p class="text-sm"></p>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 md:mt-12 text-center text-gray-400 text-xs md:text-sm">
+            <p>Powered by Prometheus • Pure Lua Obfuscator</p>
+            <p class="mt-2">
+                <a 
+                    href="https://github.com/DogDay-X-CatNap/PrometheusOld" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-purple-400 hover:text-purple-300 underline"
+                >
+                    View on GitHub
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const inputCode = document.getElementById('inputCode');
+        const outputCode = document.getElementById('outputCode');
+        const preset = document.getElementById('preset');
+        const obfuscateBtn = document.getElementById('obfuscateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const outputButtons = document.getElementById('outputButtons');
+        const statusMessage = document.getElementById('statusMessage');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+
+        function showStatus(message, isError = false) {
+            statusMessage.querySelector('p').textContent = message;
+            statusMessage.querySelector('p').className = `text-sm ${isError ? 'text-red-400' : 'text-green-400'}`;
+            statusMessage.classList.remove('hidden');
+            setTimeout(() => statusMessage.classList.add('hidden'), 5000);
+        }
+
+        obfuscateBtn.addEventListener('click', async () => {
+            const code = inputCode.value.trim();
+            
+            if (!code) {
+                showStatus('Please enter some Lua code to obfuscate', true);
+                return;
+            }
+
+            // Disable button and show loading
+            obfuscateBtn.disabled = true;
+            btnText.textContent = 'Obfuscating...';
+            btnIcon.innerHTML = '<circle class="opacity-25" cx="10" cy="10" r="9" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 10a6 6 0 0112 0"/>';
+            btnIcon.classList.add('animate-spin');
+            outputCode.value = '';
+            outputButtons.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/obfuscate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        code: code,
+                        preset: preset.value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    outputCode.value = data.obfuscatedCode;
+                    outputButtons.classList.remove('hidden');
+                    showStatus(`Successfully obfuscated with ${data.preset} preset!`);
+                } else {
+                    throw new Error(data.message || data.error || 'Obfuscation failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus(`Error: ${error.message}`, true);
+                outputCode.value = `// Error: ${error.message}\n// Please check your Lua code syntax and try again.`;
+            } finally {
+                // Re-enable button
+                obfuscateBtn.disabled = false;
+                btnText.textContent = 'Obfuscate Code';
+                btnIcon.innerHTML = '<path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>';
+                btnIcon.classList.remove('animate-spin');
+            }
+        });
+
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(outputCode.value);
+            showStatus('Copied to clipboard!');
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const blob = new Blob([outputCode.value], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'obfuscated.lua';
+            a.click();
+            URL.revokeObjectURL(url);
+            showStatus('Downloaded obfuscated.lua');
+        });
+    </script>
+</body>
+</html>
