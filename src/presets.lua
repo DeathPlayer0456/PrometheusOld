@@ -124,7 +124,7 @@ return {
         -- The default LuaVersion is Lua51
         LuaVersion = "Lua51";
         -- For minifying no VarNamePrefix is applied
-        VarNamePrefix = "IiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiieffeffegIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiefefIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiiiIiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiii";
+        VarNamePrefix = "IiiiiiiiIiieIiIiiIIiiiiIIeIIIIIIIiiIiiiiiiiiiieiiiiiiiiiii";
         -- Name Generator for Variables that look like this: IlI1lI1l
         NameGenerator = "Il";
         -- No pretty printing
