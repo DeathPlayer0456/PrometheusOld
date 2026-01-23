@@ -52,7 +52,7 @@ app.post('/api/obfuscate', async (req, res) => {
 
   const timestamp = Date.now();
   const inputFile = path.join(TEMP_DIR, `input_${timestamp}.lua`);
-  const outputFile = path.join(TEMP_DIR, `input_${timestamp}_obfuscated.lua`);
+  const outputFile = inputFile.replace('.lua', '.obfuscated.lua');
 
   try {
     // Write input code to temp file
@@ -71,16 +71,39 @@ app.post('/api/obfuscate', async (req, res) => {
       console.error('Obfuscation stderr:', stderr);
     }
 
-    // Read obfuscated output
-    if (!fs.existsSync(outputFile)) {
+    // Read obfuscated output - try multiple possible output file patterns
+    let obfuscatedCode;
+    const possibleOutputs = [
+      outputFile,
+      inputFile.replace('.lua', '.obfuscated.lua'),
+      inputFile.replace('.lua', '_obfuscated.lua'),
+      path.join(TEMP_DIR, 'output.lua'),
+    ];
+
+    let foundFile = null;
+    for (const possibleFile of possibleOutputs) {
+      if (fs.existsSync(possibleFile)) {
+        foundFile = possibleFile;
+        break;
+      }
+    }
+
+    if (!foundFile) {
+      // Log available files for debugging
+      const files = fs.readdirSync(TEMP_DIR);
+      console.error('Output file not found. Files in temp dir:', files);
       throw new Error('Obfuscated file was not created');
     }
 
-    const obfuscatedCode = fs.readFileSync(outputFile, 'utf8');
+    obfuscatedCode = fs.readFileSync(foundFile, 'utf8');
 
     // Clean up temp files
-    fs.unlinkSync(inputFile);
-    fs.unlinkSync(outputFile);
+    try {
+      if (fs.existsSync(inputFile)) fs.unlinkSync(inputFile);
+      if (foundFile && fs.existsSync(foundFile)) fs.unlinkSync(foundFile);
+    } catch (cleanupErr) {
+      console.error('Cleanup error:', cleanupErr);
+    }
 
     res.json({ 
       success: true, 
