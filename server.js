@@ -45,7 +45,7 @@ app.post('/api/obfuscate', async (req, res) => {
     return res.status(400).json({ error: 'No code provided' });
   }
 
-  const validPresets = ['Weak', 'Medium', 'Strong', 'Extreme'];
+  const validPresets = ['Weak', 'Medium', 'Strong', 'Vm'];
   if (!validPresets.includes(preset)) {
     return res.status(400).json({ error: 'Invalid preset' });
   }
