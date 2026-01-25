@@ -64,7 +64,7 @@ app.post('/api/obfuscate', async (req, res) => {
     
     const { stdout, stderr } = await execPromise(command, {
       cwd: __dirname,
-      timeout: 30000 // 30 second timeout
+      timeout: 3000000 // 30 second timeout
     });
 
     if (stderr) {
