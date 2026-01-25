@@ -3,164 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prometheus - Lua Obfuscator</title>
+    <title>Cimonify - Lua Obfuscator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background: linear-gradient(to bottom right, #1a1a2e, #3d1e52, #1a1a2e);
+            background: #000000;
         }
+        
+        .sidebar {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100%;
+            background: #111111;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            border-right: 1px solid #333;
+        }
+        
+        .sidebar.active {
+            left: 0;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
         textarea {
             scrollbar-width: thin;
-            scrollbar-color: #4a5568 #1a202c;
+            scrollbar-color: #4a5568 #000000;
         }
         textarea::-webkit-scrollbar {
             width: 8px;
         }
         textarea::-webkit-scrollbar-track {
-            background: #1a202c;
+            background: #000000;
         }
         textarea::-webkit-scrollbar-thumb {
             background: #4a5568;
             border-radius: 4px;
         }
-        .gradient-text {
-            background: linear-gradient(to right, #ef4444, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
     </style>
 </head>
-<body class="min-h-screen text-white p-4 md:p-8">
-    <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-8 md:mb-12">
-            <div class="flex items-center justify-center gap-3 mb-4">
-                <svg class="w-10 h-10 md:w-12 md:h-12 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <h1 class="text-4xl md:text-5xl font-bold gradient-text">
-                    Prometheus
-                </h1>
-            </div>
-            <p class="text-lg md:text-xl text-gray-300">Lua Code Obfuscator</p>
-            <p class="text-xs md:text-sm text-gray-400 mt-2">Protect your Lua scripts with advanced obfuscation</p>
+<body class="min-h-screen text-white">
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="p-6">
+            <h2 class="text-2xl font-bold mb-4">Welcome to Cimonify Obfuscator!</h2>
+            <p class="text-gray-400">!Cimonify!</p>
         </div>
+    </div>
+    
+    <!-- Menu Button -->
+    <button id="menuBtn" class="fixed top-4 left-4 z-50 bg-gray-900 p-3 rounded-lg hover:bg-gray-800 border border-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    </button>
 
-        <!-- Preset Selection -->
-        <div class="mb-6 flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4">
-            <label class="text-gray-300 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                </svg>
-                Preset:
-            </label>
-            <select id="preset" class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500">
-                <option value="Weak">Weak</option>
-                <option value="Medium">Medium</option>
-                <option value="Strong" selected>Strong</option>
-                <option value="Vm">Extreme</option>
-            </select>
-        </div>
-
-        <!-- Main Content -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-            <!-- Input Panel -->
-            <div class="bg-gray-800 rounded-xl shadow-2xl border border-gray-700 overflow-hidden">
-                <div class="bg-gray-900 px-4 md:px-6 py-3 md:py-4 border-b border-gray-700">
-                    <h2 class="text-base md:text-lg font-semibold flex items-center gap-2">
-                        <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
-                        Input Code
-                    </h2>
+    <div class="p-4 md:p-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header with Image -->
+            <div class="text-center mb-8 md:mb-12">
+                <div class="flex items-center justify-center gap-4 mb-6">
+                    <img src="https://i.ibb.co/RTLg32sJ/images-6.jpg" alt="Cimonify" class="w-16 h-16 rounded-lg" />
+                    <div class="text-left">
+                        <h1 class="text-3xl md:text-4xl font-bold text-white">cimonify.com</h1>
+                        <p class="text-sm text-gray-400">Lua Code Protection</p>
+                    </div>
                 </div>
-                <textarea
-                    id="inputCode"
-                    class="w-full h-64 md:h-96 bg-gray-900 text-gray-100 p-4 md:p-6 font-mono text-xs md:text-sm focus:outline-none resize-none"
-                    placeholder="-- Paste your Lua code here&#x0a;local function hello(name)&#x0a;  print(&quot;Hello, &quot; .. name)&#x0a;end&#x0a;&#x0a;hello(&quot;World&quot;)"
-                    spellcheck="false"
-                >-- Paste your Lua code here
+            </div>
+
+            <!-- Preset Selection -->
+            <div class="mb-6 flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4">
+                <label class="text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    Preset:
+                </label>
+                <select id="preset" class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-white">
+                    <option value="Weak">Weak</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Strong" selected>Strong</option>
+                    <option value="Vm">Vm</option>
+                </select>
+            </div>
+
+            <!-- Main Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+                <!-- Input Panel -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl border border-gray-800 overflow-hidden">
+                    <div class="bg-black px-4 md:px-6 py-3 md:py-4 border-b border-gray-800">
+                        <h2 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                            Input Code
+                        </h2>
+                    </div>
+                    <textarea
+                        id="inputCode"
+                        class="w-full h-64 md:h-96 bg-black text-white p-4 md:p-6 font-mono text-xs md:text-sm focus:outline-none resize-none"
+                        placeholder="-- Paste your Lua code here&#x0a;local function hello(name)&#x0a;  print(&quot;Hello, &quot; .. name)&#x0a;end&#x0a;&#x0a;hello(&quot;World&quot;)"
+                        spellcheck="false"
+                    >-- Paste your Lua code here
 local function hello(name)
   print("Hello, " .. name)
 end
 
 hello("World")</textarea>
-            </div>
-
-            <!-- Output Panel -->
-            <div class="bg-gray-800 rounded-xl shadow-2xl border border-gray-700 overflow-hidden">
-                <div class="bg-gray-900 px-4 md:px-6 py-3 md:py-4 border-b border-gray-700 flex justify-between items-center">
-                    <h2 class="text-base md:text-lg font-semibold flex items-center gap-2">
-                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        Obfuscated Code
-                    </h2>
-                    <div id="outputButtons" class="hidden flex gap-2">
-                        <button
-                            id="copyBtn"
-                            class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
-                            title="Copy to clipboard"
-                        >
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
-                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
-                            </svg>
-                        </button>
-                        <button
-                            id="downloadBtn"
-                            class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
-                            title="Download file"
-                        >
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>
-                    </div>
                 </div>
-                <textarea
-                    id="outputCode"
-                    readonly
-                    class="w-full h-64 md:h-96 bg-gray-900 text-gray-100 p-4 md:p-6 font-mono text-xs md:text-sm focus:outline-none resize-none"
-                    placeholder="Obfuscated code will appear here..."
-                    spellcheck="false"
-                ></textarea>
+
+                <!-- Output Panel -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl border border-gray-800 overflow-hidden">
+                    <div class="bg-black px-4 md:px-6 py-3 md:py-4 border-b border-gray-800 flex justify-between items-center">
+                        <h2 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            Obfuscated Code
+                        </h2>
+                        <div id="outputButtons" class="hidden flex gap-2">
+                            <button
+                                id="copyBtn"
+                                class="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+                                title="Copy to clipboard"
+                            >
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                                </svg>
+                            </button>
+                            <button
+                                id="downloadBtn"
+                                class="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+                                title="Download file"
+                            >
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea
+                        id="outputCode"
+                        readonly
+                        class="w-full h-64 md:h-96 bg-black text-white p-4 md:p-6 font-mono text-xs md:text-sm focus:outline-none resize-none"
+                        placeholder="Obfuscated code will appear here..."
+                        spellcheck="false"
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- Obfuscate Button -->
+            <div class="mt-6 md:mt-8 text-center">
+                <button
+                    id="obfuscateBtn"
+                    class="bg-white hover:bg-gray-200 text-black font-bold py-3 md:py-4 px-8 md:px-12 rounded-xl shadow-lg transform transition-all hover:scale-105 flex items-center gap-3 mx-auto text-sm md:text-base"
+                >
+                    <svg id="btnIcon" class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                    </svg>
+                    <span id="btnText">Obfuscate Code</span>
+                </button>
+            </div>
+
+            <!-- Status Message -->
+            <div id="statusMessage" class="mt-4 text-center hidden">
+                <p class="text-sm"></p>
             </div>
         </div>
+    </div>
 
-        <!-- Obfuscate Button -->
-        <div class="mt-6 md:mt-8 text-center">
-            <button
-                id="obfuscateBtn"
-                class="bg-gradient-to-r from-red-500 to-purple-600 hover:from-red-600 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-3 md:py-4 px-8 md:px-12 rounded-xl shadow-lg transform transition-all hover:scale-105 disabled:scale-100 flex items-center gap-3 mx-auto text-sm md:text-base"
-            >
-                <svg id="btnIcon" class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
-                </svg>
-                <span id="btnText">Obfuscate Code</span>
-            </button>
-        </div>
-
-        <!-- Status Message -->
-        <div id="statusMessage" class="mt-4 text-center hidden">
-            <p class="text-sm"></p>
-        </div>
-
-        <!-- Footer -->
-        <div class="mt-8 md:mt-12 text-center text-gray-400 text-xs md:text-sm">
-            <p>Powered by Prometheus • Pure Lua Obfuscator</p>
-            <p class="mt-2">
-                <a 
-                    href="https://github.com/DogDay-X-CatNap/PrometheusOld" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    class="text-purple-400 hover:text-purple-300 underline"
-                >
-                    View on GitHub
-                </a>
-            </p>
-        </div>
+    <!-- Footer -->
+    <div class="mt-12 pb-6 text-center text-white text-xs md:text-sm">
+        <p>© All rights reserved Cimonify Obfuscator v1</p>
     </div>
 
     <script>
@@ -174,6 +208,20 @@ hello("World")</textarea>
         const statusMessage = document.getElementById('statusMessage');
         const btnText = document.getElementById('btnText');
         const btnIcon = document.getElementById('btnIcon');
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        // Sidebar toggle
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
 
         function showStatus(message, isError = false) {
             statusMessage.querySelector('p').textContent = message;
