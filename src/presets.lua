@@ -126,7 +126,7 @@ return {
         -- For minifying no VarNamePrefix is applied
         VarNamePrefix = "lIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIl";
         -- Name Generator for Variables that look like this: IlI1lI1l
-        NameGenerator = "Il";
+        NameGenerator = "Number";
         -- No pretty printing
         PrettyPrint = false;
         -- Seed is generated based on current time
