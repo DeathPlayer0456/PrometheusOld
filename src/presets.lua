@@ -124,13 +124,13 @@ return {
         -- The default LuaVersion is Lua51
         LuaVersion = "Lua51";
         -- For minifying no VarNamePrefix is applied
-        VarNamePrefix = "lIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIl";
+        VarNamePrefix = "e";
         -- Name Generator for Variables that look like this: IlI1lI1l
         NameGenerator = "Number";
         -- No pretty printing
         PrettyPrint = false;
         -- Seed is generated based on current time
-        Seed = 0;
+        Seed = 99999999999999999;
         -- Obfuscation steps
         Steps = {
             {
