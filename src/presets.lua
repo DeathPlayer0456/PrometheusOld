@@ -25,9 +25,9 @@ return {
         -- The default LuaVersion is Lua51
         LuaVersion = "Lua51";
         -- For minifying no VarNamePrefix is applied
-        VarNamePrefix = "e";
+        VarNamePrefix = "IiiiiiiiIiiIiIiiIIiiiiIIIIIIIIIiiIiiiiiiiiiiiiiiiiiiiii";
         -- Name Generator for Variables that look like this: IlI1lI1l
-        NameGenerator = "MangledShuffled";
+        NameGenerator = "Il";
         -- No pretty printing
         PrettyPrint = false;
         -- Seed is generated based on current time
@@ -43,7 +43,7 @@ return {
             {
                 Name = "WrapInFunction";
                 Settings = {
-                    Iterations = 1;
+                    Iterations = 3;
                 }
             }
         }
@@ -52,9 +52,9 @@ return {
         -- The default LuaVersion is Lua51
         LuaVersion = "Lua51";
         -- For minifying no VarNamePrefix is applied
-        VarNamePrefix = "";
+        VarNamePrefix = "IlIlIlIlIlIlIl";
         -- Name Generator for Variables that look like this: IlI1lI1l
-        NameGenerator = "MangledShuffled";
+        NameGenerator = "Il";
         -- No pretty printing
         PrettyPrint = false;
         -- Seed is generated based on current time
@@ -74,9 +74,9 @@ return {
         -- The default LuaVersion is Lua51
         LuaVersion = "Lua51";
         -- For minifying no VarNamePrefix is applied
-        VarNamePrefix = "";
+        VarNamePrefix = "IlIlIlIlIlIlIlIlIlIlIlIl";
         -- Name Generator for Variables that look like this: IlI1lI1l
-        NameGenerator = "MangledShuffled";
+        NameGenerator = "Il";
         -- No pretty printing
         PrettyPrint = false;
         -- Seed is generated based on current time
@@ -124,11 +124,11 @@ return {
         -- The default LuaVersion is Lua51
         LuaVersion = "Lua51";
         -- For minifying no VarNamePrefix is applied
-        VarNamePrefix = "l";
+        VarNamePrefix = "lIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIlIl";
         -- Name Generator for Variables that look like this: IlI1lI1l
-        NameGenerator = "Mangled";
+        NameGenerator = "Il";
         -- No pretty printing
-        PrettyPrint = false;
+        PrettyPrint = true;
         -- Seed is generated based on current time
         Seed = 0;
         -- Obfuscation steps
